@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -59,8 +61,62 @@ func initialize(vcsGit *vcsCmd) {
 		}
 	}
 }
+func link() {
+	// dotfmDir path
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	// file path
+	fpath := filepath.Join(os.Getenv("HOME"), "Practice/dp-questions/wildcard.cpp")
+	// check if file exists and is not a directory
+	finfo, err := os.Stat(fpath)
+	if err != nil {
+		panic(err)
+	}
+	if finfo.IsDir() {
+		panic("expected file found directory")
+	}
+	// extract file name from file path
+	fname := filepath.Base(fpath)
 
+	// copy src file to dotfmDir
+	fi, _ := os.Open(fpath)
+	defer fi.Close()
+
+	r := bufio.NewReader(fi)
+
+	fo, _ := os.Create(filepath.Join(path, fname))
+	defer fo.Close()
+
+	w := bufio.NewWriter(fo)
+	buf := make([]byte, 1024)
+
+	for {
+		n, err := r.Read(buf)
+		if err != nil && err != io.EOF {
+			panic(err)
+		}
+		if n == 0 {
+			break
+		}
+		if _, err := w.Write(buf[:n]); err != nil {
+			panic(err)
+		}
+	}
+
+	if err := w.Flush(); err != nil {
+		panic(err)
+	}
+
+	err = os.Remove(fpath)
+	if err != nil {
+		panic(err)
+	}
+	err = os.Symlink(filepath.Join(path, fname), fpath)
+	if err != nil {
+		panic(err)
+	}
+}
 func main() {
 	ping(vcsGit)
 	initialize(vcsGit)
+	link()
 }
