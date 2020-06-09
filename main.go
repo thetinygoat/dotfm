@@ -37,14 +37,14 @@ var vcsGit = &vcsCmd{
 }
 
 // checks if git is installed
-func ping(vcsGit *vcsCmd) {
+func ping() {
 	cmd := exec.Command(vcsGit.cmd, vcsGit.pingCmd)
 	err := cmd.Run()
 	if err != nil {
 		panic(err)
 	}
 }
-func initialize(vcsGit *vcsCmd) {
+func initialize() {
 	// check if dotfmDir directory exists
 	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -59,13 +59,16 @@ func initialize(vcsGit *vcsCmd) {
 			fmt.Println(err)
 			panic(err)
 		}
+		fmt.Println("initialized new repository in " + path)
+	} else {
+		fmt.Println("repository already exists in " + path)
 	}
 }
-func link() {
+
+// function to add file to tracker
+func link(fpath string) {
 	// dotfmDir path
 	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
-	// file path
-	fpath := filepath.Join(os.Getenv("HOME"), "Practice/dp-questions/wildcard.cpp")
 	// check if file exists and is not a directory
 	finfo, err := os.Stat(fpath)
 	if err != nil {
@@ -116,7 +119,6 @@ func link() {
 	}
 }
 func main() {
-	ping(vcsGit)
-	initialize(vcsGit)
-	link()
+	ping()
+	initializeCli()
 }
