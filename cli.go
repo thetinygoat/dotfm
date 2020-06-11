@@ -9,26 +9,76 @@ import (
 func initializeCli() {
 
 	app := &cli.App{
-		Name:  "Dotfm",
-		Usage: "Dead simple dotfile management",
+		Name:  "dotfm",
+		Usage: "dead simple dotfile management",
 		Commands: []*cli.Command{
 			{
-				Name:    "init",
-				Aliases: []string{"i"},
-				Usage:   "initialize dotfm repository",
+				Name:  "init",
+				Usage: "initialize dotfm repository",
 				Action: func(c *cli.Context) error {
-					initialize()
-					return nil
+					err := initialize()
+					return err
 				},
 			},
 			{
-				Name:    "add",
-				Aliases: []string{"a"},
-				Usage:   "add a file to dotfm tracker",
+				Name:  "track",
+				Usage: "add a file to dotfm tracker",
 				Action: func(c *cli.Context) error {
 					fpath := c.Args().Get(0)
-					link(fpath)
-					return nil
+					err := link(fpath)
+					return err
+				},
+			},
+			{
+				Name:  "remote",
+				Usage: "manage remotes",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "add",
+						Usage: "add a new remote",
+						Action: func(c *cli.Context) error {
+							rname := c.Args().Get(0)
+							rurl := c.Args().Get(1)
+							err := addRemote(rname, rurl)
+							return err
+						},
+					},
+					{
+						Name:  "remove",
+						Usage: "remove an existing remote",
+						Action: func(c *cli.Context) error {
+							rname := c.Args().Get(0)
+							err := removeRemote(rname)
+							return err
+						},
+					},
+					{
+						Name:  "list",
+						Usage: "list existing remotes",
+						Action: func(c *cli.Context) error {
+							err := listRemotes()
+							return err
+						},
+					},
+				},
+			},
+			{
+				Name:  "clone",
+				Usage: "clone an existing dotfm repository",
+				Action: func(c *cli.Context) error {
+					rurl := c.Args().Get(0)
+					err := clone(rurl)
+					return err
+				},
+			},
+			{
+				Name:  "sync",
+				Usage: "sync local repository with remote",
+				Action: func(c *cli.Context) error {
+					rname := c.Args().Get(0)
+					bname := c.Args().Get(1)
+					err := sync(rname, bname)
+					return err
 				},
 			},
 		},
