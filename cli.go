@@ -81,6 +81,63 @@ func initializeCli() {
 					return err
 				},
 			},
+			{
+				Name:  "commit",
+				Usage: "commit the change",
+				Action: func(c *cli.Context) error {
+					err := commit()
+					return err
+				},
+			},
+			{
+				Name:  "add",
+				Usage: "stage file to commit",
+				Action: func(c *cli.Context) error {
+					args := c.Args().Slice()
+					err := add(args)
+					return err
+				},
+			},
+			{
+				Name:  "status",
+				Usage: "status of the repository",
+				Action: func(c *cli.Context) error {
+					err := status()
+					return err
+				},
+			},
+			{
+				Name:  "list",
+				Usage: "list tracked files",
+				Action: func(c *cli.Context) error {
+					err := list()
+					return err
+				},
+			},
+			{
+				Name:  "push",
+				Usage: "push local changes to remote",
+				Action: func(c *cli.Context) error {
+					rname := c.Args().Get(0)
+					bname := c.Args().Get(1)
+					err := push(rname, bname)
+					return err
+				},
+			},
+			{
+				Name:  "env",
+				Usage: "manage environments",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "list",
+						Usage: "list all environments",
+						Action: func(c *cli.Context) error {
+							err := envList()
+							return err
+						},
+					},
+				},
+			},
 		},
 	}
 	err := app.Run(os.Args)

@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 
 	"github.com/pkg/errors"
 )
@@ -181,6 +183,79 @@ func sync(rname string, bname string) error {
 	err := cmd.Run()
 	return err
 
+}
+
+func commit() error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "commit")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	os.Chdir(path)
+	err := cmd.Run()
+	return err
+}
+func add(files []string) error {
+	for _, file := range files {
+
+		cmd := exec.Command(vcsGit.cmd, "add", file)
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+		os.Chdir(path)
+		err := cmd.Run()
+		if err != nil {
+			panic(err)
+		}
+
+	}
+	return nil
+}
+func status() error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "status")
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	os.Chdir(path)
+	err := cmd.Run()
+	return err
+}
+func list() error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return err
+	}
+	for idx, file := range files {
+		if match, _ := regexp.MatchString(".git", file.Name()); match {
+			continue
+		}
+		fmt.Printf("%d) %s\n", idx, file.Name())
+	}
+	return nil
+}
+func push(rname string, bname string) error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "push", rname, bname)
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	os.Chdir(path)
+	err := cmd.Run()
+	return err
+}
+func envList() error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "branch", "-a")
+	os.Chdir(path)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(out))
+	return nil
 }
 func main() {
 	err := ping()
