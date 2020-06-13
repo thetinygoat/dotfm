@@ -257,6 +257,40 @@ func envList() error {
 	fmt.Println(string(out))
 	return nil
 }
+func envCreate(bname string) error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "branch", bname)
+	os.Chdir(path)
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err == nil {
+		fmt.Printf("created new environment %s\n", bname)
+		fmt.Printf("use \"$ dotfm env switch %s\" to switch to the new environment\n", bname)
+	}
+	return err
+}
+func envSwitch(bname string) error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "checkout", bname)
+	os.Chdir(path)
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err == nil {
+		fmt.Printf("switched to environment: %s\n", bname)
+	}
+	return err
+}
+func envDelete(bname string) error {
+	path := filepath.Join(os.Getenv("HOME"), dotfmDir)
+	cmd := exec.Command(vcsGit.cmd, "branch", "-D", bname)
+	os.Chdir(path)
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err == nil {
+		fmt.Printf("deleted environment: %s\n", bname)
+	}
+	return err
+}
 func main() {
 	err := ping()
 	if err != nil {
