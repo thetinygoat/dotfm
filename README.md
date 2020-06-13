@@ -27,7 +27,7 @@ $ wget -O dotfm https://git.io/JfQTV
 
 # Usage
 
-### Initialize
+## Initialize
 
 ```console
 $ dotfm init
@@ -35,61 +35,61 @@ $ dotfm init
 
 This will initialize the `dotfm` repository in `$HOME/.dotfm`
 
-# Clone
+## Clone
 Download an existing dotfm repository or use dotfm to track a non dotfm repository.
 ```console
 $ dotfm clone <url>
 ```
 
-# Track
+## Track
 This adds a file to the dotfm tracker.
 ```console
 $ dotfm track /path/to/file
 ```
 
-# List
+## List
 Lists tracked files.
 ```console
 $ dotfm list
 ```
-# Status
+## Status
 Shows the status of the repository.
 ```console
 $ dotfm status
 ```
 
-# Stage
+## Stage
 Stage files to be commited.
 ```console
 $ dotfm add <filename>
 ```
 
-# Commit
+## Commit
 Commit your changes.
 ```console
 $ dotfm commit
 ```
 This will open your get editor.
 
-# Remote
+## Remote
 
-## Add
+### Add
 Add a new Remote.
 ```console
 $ dotfm remote add <remote name> <url>
 ```
-## Remove
+### Remove
 Remove an existing Remote.
 ```console
 $ dotfm remote remove <remote name>
 ```
-## List
+### List
 List remotes.
 ```console
 $ dotfm remote list
 ```
 
-# Push
+## Push
 Push local changes to remote repository.
 ```console
 $ dotfm push <remote name> <branch>
@@ -100,7 +100,7 @@ Example:
 $ dotfm push origin master
 ```
 
-# Sync
+## Sync
 Sync local repository with remote.
 ```console
 $ dotfm sync <remote name> <branch>
@@ -110,22 +110,22 @@ Example:
 $ dotfm sync origin master
 ```
 
-# Environments
+## Environments
 Environments are nothing but git branches but they can be very powerful. You can create different environments for different machines and use them accordingly.
 
-# Create an Environment
+## Create an Environment
 ```console
 $ dotfm env create <env name>
 ```
-# List Environments
+## List Environments
 ```console
 $ dotfm env list
 ```
-# Switch to an Environment
+## Switch to an Environment
 ```console
 $ dotfm env switch <env name>
 ```
-# Delete an Environment
+## Delete an Environment
 ```console
 $ dotfm env delete <env name>
 ```
