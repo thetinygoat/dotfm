@@ -16,17 +16,27 @@ func initializeCli() {
 				Name:  "init",
 				Usage: "Initialize an empty dotfm repository",
 				Action: func(c *cli.Context) error {
-					err := initialize()
-					return err
+					create()
+					return nil
 				},
 			},
 			{
 				Name:  "track",
 				Usage: "Add a file to the dotfm tracker",
 				Action: func(c *cli.Context) error {
+					checkDotfmDir()
 					fpath := c.Args().Get(0)
-					err := link(fpath)
-					return err
+					track(fpath)
+					return nil
+				},
+			},
+			{
+				Name:  "list",
+				Usage: "List tracked files",
+				Action: func(c *cli.Context) error {
+					checkDotfmDir()
+					list()
+					return nil
 				},
 			},
 			{
@@ -37,27 +47,30 @@ func initializeCli() {
 						Name:  "add",
 						Usage: "Add a new remote to local repository",
 						Action: func(c *cli.Context) error {
+							checkDotfmDir()
 							rname := c.Args().Get(0)
 							rurl := c.Args().Get(1)
-							err := addRemote(rname, rurl)
-							return err
+							remoteAdd(rname, rurl)
+							return nil
 						},
 					},
 					{
 						Name:  "remove",
 						Usage: "Remove an existing remote from the local repository",
 						Action: func(c *cli.Context) error {
+							checkDotfmDir()
 							rname := c.Args().Get(0)
-							err := removeRemote(rname)
-							return err
+							remoteRemove(rname)
+							return nil
 						},
 					},
 					{
 						Name:  "list",
 						Usage: "List all remotes linked to local repository",
 						Action: func(c *cli.Context) error {
-							err := listRemotes()
-							return err
+							checkDotfmDir()
+							remoteList()
+							return nil
 						},
 					},
 				},
@@ -66,62 +79,60 @@ func initializeCli() {
 				Name:  "clone",
 				Usage: "Clone an existing dotfm repository",
 				Action: func(c *cli.Context) error {
+					checkDotfmDir()
 					rurl := c.Args().Get(0)
-					err := clone(rurl)
-					return err
+					clone(rurl)
+					return nil
 				},
 			},
 			{
 				Name:  "sync",
 				Usage: "Sync local repository with remote repositories",
 				Action: func(c *cli.Context) error {
+					checkDotfmDir()
 					rname := c.Args().Get(0)
 					bname := c.Args().Get(1)
-					err := sync(rname, bname)
-					return err
+					sync(rname, bname)
+					return nil
 				},
 			},
 			{
 				Name:  "commit",
 				Usage: "Record changes to the repository",
 				Action: func(c *cli.Context) error {
-					err := commit()
-					return err
+					checkDotfmDir()
+					commit()
+					return nil
 				},
 			},
 			{
 				Name:  "add",
 				Usage: "Stage files to be commited",
 				Action: func(c *cli.Context) error {
+					checkDotfmDir()
 					args := c.Args().Slice()
-					err := add(args)
-					return err
+					add(args)
+					return nil
 				},
 			},
 			{
 				Name:  "status",
 				Usage: "Status of the repository",
 				Action: func(c *cli.Context) error {
-					err := status()
-					return err
-				},
-			},
-			{
-				Name:  "list",
-				Usage: "List tracked files",
-				Action: func(c *cli.Context) error {
-					err := list()
-					return err
+					checkDotfmDir()
+					status()
+					return nil
 				},
 			},
 			{
 				Name:  "push",
 				Usage: "Push local changes to a remote",
 				Action: func(c *cli.Context) error {
+					checkDotfmDir()
 					rname := c.Args().Get(0)
 					bname := c.Args().Get(1)
-					err := push(rname, bname)
-					return err
+					push(rname, bname)
+					return nil
 				},
 			},
 			{
@@ -132,35 +143,39 @@ func initializeCli() {
 						Name:  "list",
 						Usage: "List all environments",
 						Action: func(c *cli.Context) error {
-							err := envList()
-							return err
+							checkDotfmDir()
+							envList()
+							return nil
 						},
 					},
 					{
 						Name:  "create",
 						Usage: "Create new environment",
 						Action: func(c *cli.Context) error {
+							checkDotfmDir()
 							bname := c.Args().Get(0)
-							err := envCreate(bname)
-							return err
+							envCreate(bname)
+							return nil
 						},
 					},
 					{
 						Name:  "switch",
 						Usage: "Switch to a new environment",
 						Action: func(c *cli.Context) error {
+							checkDotfmDir()
 							bname := c.Args().Get(0)
-							err := envSwitch(bname)
-							return err
+							envSwitch(bname)
+							return nil
 						},
 					},
 					{
 						Name:  "delete",
 						Usage: "Delete an environment",
 						Action: func(c *cli.Context) error {
+							checkDotfmDir()
 							bname := c.Args().Get(0)
-							err := envDelete(bname)
-							return err
+							envDelete(bname)
+							return nil
 						},
 					},
 				},

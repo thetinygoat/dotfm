@@ -20,8 +20,8 @@ func create() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Printf(InfoColor, "initialized empty dotfm repository in "+DotfmPath+"\n")
+		fmt.Printf("initialized empty dotfm repository in %s\n", DotfmPath)
 	} else {
-		fmt.Printf(ErrorColor, "dotfm repository already exists in "+DotfmPath+"\n")
+		fmt.Printf("dotfm repository already exists in %s\n", DotfmPath)
 	}
 }
