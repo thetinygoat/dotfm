@@ -68,9 +68,9 @@ func initialize() error {
 		}
 		fmt.Println("initialized new repository in " + path)
 		return nil
-	} else {
-		return errors.New("repository already exists in " + path)
 	}
+	return errors.New("repository already exists in " + path)
+
 }
 
 // function to add file to tracker
