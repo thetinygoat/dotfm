@@ -99,14 +99,18 @@ func trackFile(destination, fpath string) error {
 }
 
 func list() {
-	files, err := ioutil.ReadDir(DotfmPath)
+	contents, err := ioutil.ReadDir(DotfmPath)
 	if err != nil {
 		panic(err)
 	}
-	for idx, file := range files {
-		if match, _ := regexp.MatchString(".git$", file.Name()); match {
+	for idx, content := range contents {
+		prefix := RegularFile
+		if match, _ := regexp.MatchString(".git$", content.Name()); match {
 			continue
 		}
-		fmt.Printf("%d) %s\n", idx, file.Name())
+		if content.IsDir() {
+			prefix = Directory
+		}
+		fmt.Printf("%d) %s %s\n", idx, prefix,content.Name())
 	}
 }
