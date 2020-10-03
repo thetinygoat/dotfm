@@ -24,6 +24,8 @@ const (
 	BranchDeleteCmd = "branch -D {branch}"
 	BranchSwitchCmd = "checkout {branch}"
 	DotfmDir        = ".dotfm"
+	RegularFile     = "-"
+	Directory       = "d"
 )
 
 //DotfmPath dotfm root path
